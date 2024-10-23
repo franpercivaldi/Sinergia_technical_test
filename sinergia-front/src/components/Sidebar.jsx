@@ -16,7 +16,7 @@ const buttonStyles = {
   margin: '30% 0 30% 0', // Agregar un poco de margen
 };
 
-export default function TemporaryDrawer() {
+const Sidebar = () =>  {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -66,3 +66,5 @@ export default function TemporaryDrawer() {
     </div>
   );
 }
+
+export default Sidebar;

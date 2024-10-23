@@ -1,17 +1,20 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-
-const style = {
-  height: '100vh',
-}
+import Grid from '@mui/material/Grid2';
 
 const Home = () => {
   return(
-    <div style={style}>
-      <h1>Home</h1>
-      <p>Welcom!</p>
-      <Sidebar />
-    </div>
+    <Grid container sx={{minHeight:'100%', minWidth:'100vw'}}>
+      {/* First part of the screen */}
+      <Grid size={6} sx={{backgroundColor:'red'}}>
+        <Sidebar />
+      </Grid>
+
+      {/* Second part of the screen */}
+      <Grid size={6} sx={{backgroundColor:'blue'}}>
+        <h1>Home</h1>
+      </Grid>
+    </Grid>
   );
 }
 
