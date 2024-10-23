@@ -2,7 +2,6 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 
 const style = {
-  backgroundColor: 'lightblue',
   height: '100vh',
 }
 
