@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
 // Define el estilo de los botones
 const buttonStyles = {
@@ -52,7 +53,7 @@ const Sidebar = () =>  {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Open drawer</Button>
+      <MenuOpenOutlinedIcon fontSize="large" onClick={toggleDrawer(true)} style={{color:'white', margin:'20px'}}/>
       <Drawer
         open={open}
         onClose={toggleDrawer(false)}
