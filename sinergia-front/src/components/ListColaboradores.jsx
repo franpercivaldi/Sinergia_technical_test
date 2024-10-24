@@ -7,7 +7,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    height: '90%',
+    height: '100%',
     width: '60%',
     overflow: 'auto',
     scrollbarWidth: 'thin',

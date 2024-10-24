@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import ListColaboradores from '../components/ListColaboradores';
+import DatosPersonales from '../components/DatosPersonales';
 import Grid from '@mui/material/Grid2';
 
 const Home = () => {
@@ -9,27 +10,42 @@ const Home = () => {
     {id:1, name:'João'},
     {id:2, name:'Maria'},
     {id:3, name:'José'},
-    {id:4, name:'Pedro'},
+    {id:1, name:'João'},
+    {id:2, name:'Maria'},
+    {id:3, name:'José'},
+    {id:1, name:'João'},
   ]
 
 
   return(
-    <Grid container sx={{minHeight:'100%', minWidth:'100vw'}}>
+    <Grid container sx={{minHeight:'100vh', minWidth:'100vw'}}>
       <Sidebar />
       {/* First part of the screen */}
       <Grid
-        size={4}
+        size={3}
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'left',
+          justifyContent: 'flex-start',
+          height: '100vh',
+          overflow: 'hidden',
         }}
       >
         <ListColaboradores colaboradores={colaboradores}/>
       </Grid>
 
       {/* Second part of the screen */}
-      <Grid >
+      <Grid
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          height: '100vh',
+        }}
+      >
+        <DatosPersonales />
       </Grid>
     </Grid>
   );
