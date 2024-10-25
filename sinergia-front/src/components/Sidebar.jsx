@@ -6,6 +6,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
+import { useNavigate } from 'react-router-dom';
 
 // Define el estilo de los botones
 const buttonStyles = {
@@ -19,6 +20,8 @@ const buttonStyles = {
 
 const Sidebar = () =>  {
   const [open, setOpen] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -46,7 +49,7 @@ const Sidebar = () =>  {
       </Button>
       {/* Boton de calendario */}
       <Button sx={buttonStyles}>
-        <CalendarTodayOutlinedIcon fontSize="large" />
+        <CalendarTodayOutlinedIcon fontSize="large" onClick={() => navigate('/calendar')} />
       </Button>
     </Box>
   );

@@ -1,20 +1,27 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import ListColaboradores from '../components/ListColaboradores';
 import DatosPersonales from '../components/DatosPersonales';
 import Grid from '@mui/material/Grid2';
 
-const Home = () => {
+import { getColaboradores } from '../api/services/colaboradoresService';
 
-  const colaboradores = [
-    {id:1, name:'João'},
-    {id:2, name:'Maria'},
-    {id:3, name:'José'},
-    {id:1, name:'João'},
-    {id:2, name:'Maria'},
-    {id:3, name:'José'},
-    {id:1, name:'João'},
-  ]
+const Home = () => {
+  const [colaboradores, setColaboradores] = useState([]);
+
+  useEffect(() => {
+    const fetchAllColaboradores = async () => {
+      try {
+        const colaboradores = await getColaboradores();
+        setColaboradores(colaboradores);
+      } catch (error) {
+        console.log("ERROR ==>", error);
+      }
+    }
+    fetchAllColaboradores();
+    console.log('==>', colaboradores);
+  }, [])
 
 
   return(
