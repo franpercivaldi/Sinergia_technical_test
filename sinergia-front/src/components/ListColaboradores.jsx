@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Paper, Box, TextField, ThemeProvider, createTheme } from '@mui/material';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
-
 const styles = {
   container: {
     display: 'flex',
@@ -68,17 +67,12 @@ const darkTheme = createTheme({
   },
 });
 
-const ListColaboradores = ({ colaboradores }) => {
+const ListColaboradores = ({ colaboradores, onDelete}) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredColaboradores = colaboradores.filter((colaborador) =>
     colaborador.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleDeleteColaborador = () => {
-    console.log('Colaborador eliminado');
-  }
-
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -106,7 +100,7 @@ const ListColaboradores = ({ colaboradores }) => {
             }}
           >
             {colaborador.nombre + ' ' + colaborador.apellido}
-            <DeleteForeverOutlinedIcon onClick={handleDeleteColaborador} />
+            <DeleteForeverOutlinedIcon onClick={() => onDelete(colaborador.id)} />
           </Paper>
         ))}
       </Box>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Paper, TextField, Box, FormControlLabel, Checkbox, RadioGroup, Radio, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
 import SelectDates from './SelectDates';
-import {createColaborador} from '../api/services/colaboradoresService';
 
 const darkTheme = createTheme({
   palette: {
@@ -60,7 +59,7 @@ const styles = {
   },
 };
 
-const DatosPersonales = () => {
+const DatosPersonales = ({onAdd}) => {
   const [datos, setDatos] = useState({
     nombre: '',
     apellido: '',
@@ -88,23 +87,18 @@ const DatosPersonales = () => {
     });
   };
 
-  const handleSubmit = async () => {
-    try {
-      await createColaborador(datos);
-      setDatos({
-        nombre: '',
-        apellido: '',
-        celular: '',
-        email: '',
-        genero: '',
-        inactivo: false,
-        fechaInicioAusencia: null,
-        fechaFinAusencia: null,
-      });
-    } catch (error) {
-      console.error('Error al guardar colaborador:', error);
-    }
-  };
+  const resetDatos = () => {
+    setDatos({
+      nombre: '',
+      apellido: '',
+      celular: '',
+      email: '',
+      genero: '',
+      inactivo: false,
+      fechaInicioAusencia: null,
+      fechaFinAusencia: null,
+    });
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -160,7 +154,13 @@ const DatosPersonales = () => {
         <SelectDates onChange={handleDateChange}/>
 
         <Box sx={styles.buttonContainer}>
-          <Button variant="contained" color='primary' onClick={handleSubmit}>
+          <Button 
+            variant="contained"
+            color='primary'
+            onClick={() => {
+              onAdd(datos)
+              resetDatos()
+            }}>
             Guardar
           </Button>
         </Box>

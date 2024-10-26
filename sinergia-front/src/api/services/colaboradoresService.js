@@ -32,3 +32,17 @@ export const createColaborador = async (datos) => {
   }
 }
 
+// Borrar colaborador por id
+export const deleteColaborador = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:8080/api/colaboradores/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al borrar colaborador:', error);
+    throw error;
+  }
+}
