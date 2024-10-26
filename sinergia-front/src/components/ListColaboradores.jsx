@@ -9,7 +9,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '100%',
-    width: '60%',
+    width: '90%',
     overflow: 'auto',
     scrollbarWidth: 'thin',
     scrollbarColor: '#424242 #212121',

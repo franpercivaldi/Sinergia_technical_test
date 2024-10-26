@@ -50,8 +50,8 @@ const styles = {
   buttonContainer: {
     display: 'flex',
     width: '95%',
-    marginTop: '20px',
     justifyContent: 'flex-end',
+    marginTop: 'auto',
   },
   checkboxGroup: {
     width: '95%',
@@ -154,7 +154,7 @@ const DatosPersonales = ({onAdd}) => {
         <SelectDates onChange={handleDateChange}/>
 
         <Box sx={styles.buttonContainer}>
-          <Button 
+          <Button
             variant="contained"
             color='primary'
             onClick={() => {

@@ -57,7 +57,7 @@ const Home = () => {
       <Sidebar />
       {/* First part of the screen */}
       <Grid
-        size={3}
+        size={4}
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -75,6 +75,7 @@ const Home = () => {
 
       {/* Second part of the screen */}
       <Grid
+      size={7}
         sx={{
           display: 'flex',
           flexDirection: 'column',
