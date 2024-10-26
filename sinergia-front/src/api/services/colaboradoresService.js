@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Retorna todos los colaboradores
 export const getColaboradores = async () => {
   try {
     const response = await axios.get('http://localhost:8080/api/colaboradores', {
@@ -14,3 +15,20 @@ export const getColaboradores = async () => {
     throw error;
   }
 }
+
+
+// Crear nuevo colaborador
+export const createColaborador = async (datos) => {
+  try {
+    const response = await axios.post('http://localhost:8080/api/colaboradores', datos, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al registrar colaborador:', error);
+    throw error;
+  }
+}
+

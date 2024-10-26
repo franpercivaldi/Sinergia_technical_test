@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, TextField, Box, FormControlLabel, Checkbox, RadioGroup, Radio, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
+import SelectDates from './SelectDates';
+import {createColaborador} from '../api/services/colaboradoresService';
 
 const darkTheme = createTheme({
   palette: {
@@ -48,9 +50,9 @@ const styles = {
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
     width: '95%',
     marginTop: '20px',
+    justifyContent: 'flex-end',
   },
   checkboxGroup: {
     width: '95%',
@@ -65,14 +67,9 @@ const DatosPersonales = () => {
     celular: '',
     email: '',
     genero: '',
-    tareasMecanicas: {
-      acomodador: false,
-      tecnicoSonido: false,
-      audio: false,
-      video: false,
-      plataforma: false,
-    },
     inactivo: false,
+    fechaInicioAusencia: null,
+    fechaFinAusencia: null,
   });
 
   const handleChange = (e) => {
@@ -82,14 +79,31 @@ const DatosPersonales = () => {
     });
   };
 
-  const handleCheckboxChange = (e, category) => {
+  const handleDateChange = (newValue) => {
+    // Actualiza el estado con las nuevas fechas seleccionadas
     setDatos({
       ...datos,
-      [category]: {
-        ...datos[category],
-        [e.target.name]: e.target.checked,
-      },
+      fechaInicioAusencia: newValue[0].toISOString().split('T')[0],
+      fechaFinAusencia: newValue[1].toISOString().split('T')[0],
     });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await createColaborador(datos);
+      setDatos({
+        nombre: '',
+        apellido: '',
+        celular: '',
+        email: '',
+        genero: '',
+        inactivo: false,
+        fechaInicioAusencia: null,
+        fechaFinAusencia: null,
+      });
+    } catch (error) {
+      console.error('Error al guardar colaborador:', error);
+    }
   };
 
   return (
@@ -127,26 +141,9 @@ const DatosPersonales = () => {
         <Box sx={styles.checkboxGroup}>
           <Typography variant="h6">Género</Typography>
           <RadioGroup row name="genero" value={datos.genero} onChange={handleChange}>
-            <FormControlLabel value="Masculino" control={<Radio />} label="Masculino" />
-            <FormControlLabel value="Femenino" control={<Radio />} label="Femenino" />
+            <FormControlLabel value="MASCULINO" control={<Radio />} label="Masculino" />
+            <FormControlLabel value="FEMENINO" control={<Radio />} label="Femenino" />
           </RadioGroup>
-        </Box>
-
-        <Box sx={styles.checkboxGroup}>
-          <Typography variant="h6">Tareas Mecánicas</Typography>
-          {['acomodador', 'tecnicoSonido', 'audio', 'video', 'plataforma'].map((tarea) => (
-            <FormControlLabel
-              key={tarea}
-              control={
-                <Checkbox
-                  checked={datos.tareasMecanicas[tarea]}
-                  onChange={(e) => handleCheckboxChange(e, 'tareasMecanicas')}
-                  name={tarea}
-                />
-              }
-              label={tarea.charAt(0).toUpperCase() + tarea.slice(1).replace(/([A-Z])/g, ' $1')}
-            />
-          ))}
         </Box>
 
         <FormControlLabel
@@ -160,12 +157,11 @@ const DatosPersonales = () => {
           label="Inactivo"
         />
 
+        <SelectDates onChange={handleDateChange}/>
+
         <Box sx={styles.buttonContainer}>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color='primary' onClick={handleSubmit}>
             Guardar
-          </Button>
-          <Button variant="outlined" color="secondary">
-            Editar
           </Button>
         </Box>
       </Paper>

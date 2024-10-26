@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, Box, TextField, ThemeProvider, createTheme } from '@mui/material';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+
 
 const styles = {
   container: {
@@ -73,6 +75,11 @@ const ListColaboradores = ({ colaboradores }) => {
     colaborador.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleDeleteColaborador = () => {
+    console.log('Colaborador eliminado');
+  }
+
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Box style={styles.container}>
@@ -99,6 +106,7 @@ const ListColaboradores = ({ colaboradores }) => {
             }}
           >
             {colaborador.nombre + ' ' + colaborador.apellido}
+            <DeleteForeverOutlinedIcon onClick={handleDeleteColaborador} />
           </Paper>
         ))}
       </Box>
