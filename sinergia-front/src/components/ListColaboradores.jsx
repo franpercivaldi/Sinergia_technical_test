@@ -3,7 +3,6 @@ import { Paper, Box, TextField, ThemeProvider, createTheme } from '@mui/material
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-
 // Estilos
 const styles = {
   container: {
@@ -24,7 +23,7 @@ const styles = {
   item: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between', // Cambiado a space-between
     height: '7%',
     width: '95%',
     padding: '10px',
@@ -70,7 +69,7 @@ const darkTheme = createTheme({
   },
 });
 
-const ListColaboradores = ({ colaboradores, onDelete, onEdit}) => {
+const ListColaboradores = ({ colaboradores, onDelete, onEdit }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredColaboradores = colaboradores.filter((colaborador) =>
@@ -102,9 +101,11 @@ const ListColaboradores = ({ colaboradores, onDelete, onEdit}) => {
               },
             }}
           >
-            {colaborador.nombre + ' ' + colaborador.apellido}
-            <DeleteForeverOutlinedIcon onClick={() => onDelete(colaborador.id)} />
-            <EditOutlinedIcon onClick={() => onEdit(colaborador.id, colaborador)} />
+            <span>{colaborador.nombre + ' ' + colaborador.apellido}</span>
+            <Box sx={{ display: 'flex', gap: '10px' }}> {/* Contenedor para los iconos */}
+              <DeleteForeverOutlinedIcon onClick={() => onDelete(colaborador.id)} />
+              <EditOutlinedIcon onClick={() => onEdit(colaborador.id, colaborador)} />
+            </Box>
           </Paper>
         ))}
       </Box>
