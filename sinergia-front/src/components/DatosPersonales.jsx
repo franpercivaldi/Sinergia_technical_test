@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Paper, TextField, Box, FormControlLabel, Checkbox, RadioGroup, Radio, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
 import SelectDates from './SelectDates';
 
@@ -59,7 +59,7 @@ const styles = {
   },
 };
 
-const DatosPersonales = ({onAdd}) => {
+const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
   const [datos, setDatos] = useState({
     nombre: '',
     apellido: '',
@@ -71,6 +71,15 @@ const DatosPersonales = ({onAdd}) => {
     fechaFinAusencia: null,
   });
 
+  useEffect(() => {
+    if (colaboradorEnEdicion) {
+      console.log('colab en edicion =>', colaboradorEnEdicion);
+      setDatos(colaboradorEnEdicion); // Rellena el formulario con los datos del colaborador en edición
+    } else {
+      resetDatos(); // Si no hay colaborador en edición, resetea el formulario
+    }
+  }, [colaboradorEnEdicion]);
+
   const handleChange = (e) => {
     setDatos({
       ...datos,
@@ -79,7 +88,6 @@ const DatosPersonales = ({onAdd}) => {
   };
 
   const handleDateChange = (newValue) => {
-    // Actualiza el estado con las nuevas fechas seleccionadas
     setDatos({
       ...datos,
       fechaInicioAusencia: newValue[0].toISOString().split('T')[0],
@@ -94,43 +102,28 @@ const DatosPersonales = ({onAdd}) => {
       celular: '',
       email: '',
       genero: '',
-      inactivo: false,
+      inactivo: false ?? false,
       fechaInicioAusencia: null,
       fechaFinAusencia: null,
     });
   }
 
+  const handleSubmit = () => {
+    if (colaboradorEnEdicion) {
+      onEdit(colaboradorEnEdicion.id, datos); // Llama a la función de edición
+    } else {
+      onAdd(datos); // Llama a la función de creación
+    }
+    resetDatos();
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Paper style={styles.container}>
-        <TextField
-          label="Nombre"
-          name="nombre"
-          value={datos.nombre}
-          onChange={handleChange}
-          sx={styles.input}
-        />
-        <TextField
-          label="Apellido"
-          name="apellido"
-          value={datos.apellido}
-          onChange={handleChange}
-          sx={styles.input}
-        />
-        <TextField
-          label="Celular"
-          name="celular"
-          value={datos.celular}
-          onChange={handleChange}
-          sx={styles.input}
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={datos.email}
-          onChange={handleChange}
-          sx={styles.input}
-        />
+        <TextField label="Nombre" name="nombre" value={datos.nombre} onChange={handleChange} sx={styles.input} />
+        <TextField label="Apellido" name="apellido" value={datos.apellido} onChange={handleChange} sx={styles.input} />
+        <TextField label="Celular" name="celular" value={datos.celular} onChange={handleChange} sx={styles.input} />
+        <TextField label="Email" name="email" value={datos.email} onChange={handleChange} sx={styles.input} />
 
         <Box sx={styles.checkboxGroup}>
           <Typography variant="h6">Género</Typography>
@@ -142,27 +135,28 @@ const DatosPersonales = ({onAdd}) => {
 
         <FormControlLabel
           control={
-            <Checkbox
-              checked={datos.inactivo}
-              onChange={(e) => setDatos({ ...datos, inactivo: e.target.checked })}
-              name="inactivo"
-            />
+            <Checkbox checked={datos.inactivo} onChange={(e) => setDatos({ ...datos, inactivo: e.target.checked })} name="inactivo" />
           }
           label="Inactivo"
         />
 
-        <SelectDates onChange={handleDateChange}/>
+        <SelectDates onChange={handleDateChange} />
 
         <Box sx={styles.buttonContainer}>
-          <Button
-            variant="contained"
-            color='primary'
-            onClick={() => {
-              onAdd(datos)
-              resetDatos()
-            }}>
-            Guardar
-          </Button>
+          {colaboradorEnEdicion ? (
+            <>
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Guardar Edición
+              </Button>
+              <Button variant="outlined" color="secondary" onClick={onCancel}>
+                Cancelar
+              </Button>
+            </>
+          ) : (
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Guardar
+            </Button>
+          )}
         </Box>
       </Paper>
     </ThemeProvider>

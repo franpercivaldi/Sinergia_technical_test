@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Paper, Box, TextField, ThemeProvider, createTheme } from '@mui/material';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
+
+// Estilos
 const styles = {
   container: {
     display: 'flex',
@@ -67,7 +70,7 @@ const darkTheme = createTheme({
   },
 });
 
-const ListColaboradores = ({ colaboradores, onDelete}) => {
+const ListColaboradores = ({ colaboradores, onDelete, onEdit}) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredColaboradores = colaboradores.filter((colaborador) =>
@@ -101,6 +104,7 @@ const ListColaboradores = ({ colaboradores, onDelete}) => {
           >
             {colaborador.nombre + ' ' + colaborador.apellido}
             <DeleteForeverOutlinedIcon onClick={() => onDelete(colaborador.id)} />
+            <EditOutlinedIcon onClick={() => onEdit(colaborador.id, colaborador)} />
           </Paper>
         ))}
       </Box>

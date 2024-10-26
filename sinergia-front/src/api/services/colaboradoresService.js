@@ -46,3 +46,18 @@ export const deleteColaborador = async (id) => {
     throw error;
   }
 }
+
+// Actualizar colaborador por id
+export const updateColaborador = async (id, datos) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/api/colaboradores/${id}`, datos, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar colaborador:', error);
+    throw error;
+  }
+}
