@@ -65,15 +65,6 @@ const DatosPersonales = () => {
     celular: '',
     email: '',
     genero: '',
-    asignaciones: {
-      apertura: false,
-      tematica: false,
-      escenificacion: false,
-      cierre: false,
-      discursos: false,
-      lector: false,
-      ayudante: false,
-    },
     tareasMecanicas: {
       acomodador: false,
       tecnicoSonido: false,
@@ -139,25 +130,6 @@ const DatosPersonales = () => {
             <FormControlLabel value="Masculino" control={<Radio />} label="Masculino" />
             <FormControlLabel value="Femenino" control={<Radio />} label="Femenino" />
           </RadioGroup>
-        </Box>
-
-        {/* TODO: agregar periodo de licencia --> Como un select picker de fecha??? */}
-
-        <Box sx={styles.checkboxGroup}>
-          <Typography variant="h6">Asignaciones</Typography>
-          {['apertura', 'tematica', 'escenificacion', 'cierre', 'discursos', 'lector', 'ayudante'].map((asignacion) => (
-            <FormControlLabel
-              key={asignacion}
-              control={
-                <Checkbox
-                  checked={datos.asignaciones[asignacion]}
-                  onChange={(e) => handleCheckboxChange(e, 'asignaciones')}
-                  name={asignacion}
-                />
-              }
-              label={asignacion.charAt(0).toUpperCase() + asignacion.slice(1)}
-            />
-          ))}
         </Box>
 
         <Box sx={styles.checkboxGroup}>

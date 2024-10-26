@@ -6,10 +6,7 @@ export const getColaboradores = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      auth: {
-        username: 'user',
-        password: 'f479a691-925e-4fcd-9bfc-fc7231b452ec',
-      },
+      withCredentials: false,
     });
     return response.data;
   } catch(error) {

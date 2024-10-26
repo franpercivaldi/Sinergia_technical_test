@@ -1,6 +1,6 @@
-package com.sinergiarh.gestion_colaboradores.api.repository;
+package com.sinergia.gestion_colaboradores_test.api.repository;
 
-import com.sinergiarh.gestion_colaboradores.api.model.Colaborador;
+import com.sinergia.gestion_colaboradores_test.api.model.Colaborador;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {

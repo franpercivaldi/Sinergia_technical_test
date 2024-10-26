@@ -1,11 +1,11 @@
-package com.sinergiarh.gestion_colaboradores.api.service;
+package com.sinergia.gestion_colaboradores_test.api.service;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import com.sinergiarh.gestion_colaboradores.api.model.Colaborador;
-import com.sinergiarh.gestion_colaboradores.api.repository.ColaboradorRepository;
+import com.sinergia.gestion_colaboradores_test.api.model.Colaborador;
+import com.sinergia.gestion_colaboradores_test.api.repository.ColaboradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service

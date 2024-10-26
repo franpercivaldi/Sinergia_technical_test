@@ -70,7 +70,7 @@ const ListColaboradores = ({ colaboradores }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredColaboradores = colaboradores.filter((colaborador) =>
-    colaborador.name.toLowerCase().includes(searchTerm.toLowerCase())
+    colaborador.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -98,7 +98,7 @@ const ListColaboradores = ({ colaboradores }) => {
               },
             }}
           >
-            {colaborador.name}
+            {colaborador.nombre + ' ' + colaborador.apellido}
           </Paper>
         ))}
       </Box>

@@ -1,13 +1,13 @@
-package com.sinergiarh.gestion_colaboradores;
+package com.sinergia.gestion_colaboradores_test;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GestionDeColaboradoresApplication {
+public class GestionColaboradoresTestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GestionDeColaboradoresApplication.class, args);
+		SpringApplication.run(GestionColaboradoresTestApplication.class, args);
 	}
 
 }

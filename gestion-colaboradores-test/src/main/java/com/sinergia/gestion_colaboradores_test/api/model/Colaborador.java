@@ -1,4 +1,4 @@
-package com.sinergiarh.gestion_colaboradores.api.model;
+package com.sinergia.gestion_colaboradores_test.api.model;
 
 import jakarta.persistence.*;
 

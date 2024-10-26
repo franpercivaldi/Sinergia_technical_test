@@ -1,9 +1,9 @@
-package com.sinergiarh.gestion_colaboradores.api.controller;
+package com.sinergia.gestion_colaboradores_test.api.controller;
 
 import java.util.List;
 
-import com.sinergiarh.gestion_colaboradores.api.model.Colaborador;
-import com.sinergiarh.gestion_colaboradores.api.service.ColaboradorService;
+import com.sinergia.gestion_colaboradores_test.api.model.Colaborador;
+import com.sinergia.gestion_colaboradores_test.api.service.ColaboradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

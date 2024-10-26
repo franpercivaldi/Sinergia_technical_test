@@ -1,10 +1,10 @@
-package com.sinergiarh.gestion_colaboradores;
+package com.sinergia.gestion_colaboradores_test;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GestionDeColaboradoresApplicationTests {
+class GestionColaboradoresTestApplicationTests {
 
 	@Test
 	void contextLoads() {

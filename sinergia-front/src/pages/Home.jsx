@@ -14,15 +14,15 @@ const Home = () => {
     const fetchAllColaboradores = async () => {
       try {
         const colaboradores = await getColaboradores();
+        console.log("COLABORADORES ==>", colaboradores);
         setColaboradores(colaboradores);
       } catch (error) {
         console.log("ERROR ==>", error);
       }
-    }
-    fetchAllColaboradores();
-    console.log('==>', colaboradores);
-  }, [])
+    };
 
+    fetchAllColaboradores();
+  }, []);
 
   return(
     <Grid container sx={{minHeight:'100vh', minWidth:'100vw'}}>
