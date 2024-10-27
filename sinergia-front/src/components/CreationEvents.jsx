@@ -4,7 +4,7 @@ import {
   TextField, MenuItem, Select, InputLabel, FormControl, Chip, Box
 } from '@mui/material';
 
-export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol, tareasNoMecanicas }) {
+export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol, tareasNoMecanicas, colaboradores }) {
   const [eventTitle, setEventTitle] = useState('');
   const [assignedCollaborators, setAssignedCollaborators] = useState({});
 
@@ -93,7 +93,12 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
                 </Box>
               )}
             >
-              {/* Todos los colaboradores que no esten elejidos pueden estar aqui */}
+              {/* Todos los colaboradores son opcion*/}
+              {colaboradores.map((colaborador) => (
+                <MenuItem key={colaborador.id} value={colaborador}>
+                  {`${colaborador.nombre} ${colaborador.apellido}`}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         ))}

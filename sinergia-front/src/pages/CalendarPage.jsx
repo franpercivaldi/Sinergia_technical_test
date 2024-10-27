@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar';
 import CreationEvents from '../components/CreationEvents';
 import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
 import {getTareasNoMecanicas} from '../api/services/tareasService';
-
+import {getColaboradores} from '../api/services/colaboradoresService';
 
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
@@ -15,6 +15,9 @@ export default function CalendarPage() {
   const [events, setEvents] = useState([
     { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
   ]);
+
+  // Todos los colaboradores
+  const [colaboradores, setColaboradores] = useState([]);
 
   // Colaboradores por rol
   const [colaboradoresByRol, setColaboradoresByRol] = useState({
@@ -33,6 +36,10 @@ export default function CalendarPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        // Obtener todos los colaboradores
+        const colaboradores = await getColaboradores();
+        setColaboradores(colaboradores);
 
         // Obtener tareas no mecanicas
         const tareasNoMecanicas = await getTareasNoMecanicas();
@@ -90,6 +97,7 @@ export default function CalendarPage() {
         onSave={handleSaveEvent}
         colaboradoresByRol={colaboradoresByRol}
         tareasNoMecanicas={tareasNoMecanicas}
+        colaboradores={colaboradores}
       />
     </Box>
   );
