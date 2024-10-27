@@ -9,6 +9,8 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
   const [assignedCollaborators, setAssignedCollaborators] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
+  console.log(colaboradoresByRol);
+
   // Requisitos mínimos de colaboradores para cada rol
   const minimumCollaborators = {
     acomodador: 2,
@@ -78,16 +80,25 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
     onClose();
   };
 
+  const isCollaboratorAvailable = (colaborador) => {
+    const startDate = new Date(colaborador.fechaInicioAusencia);
+    const endDate = new Date(colaborador.fechaFinAusencia);
+    const eventDate = new Date(selectedDate);
+    return !(eventDate >= startDate && eventDate <= endDate);
+  };
+
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" >
+    <Dialog open={open} onClose={onClose} maxWidth="lg">
       <DialogTitle>Crear Evento</DialogTitle>
-      <DialogContent >
+      <DialogContent>
         <TextField
           label="Título del Evento"
           value={eventTitle}
           onChange={(e) => setEventTitle(e.target.value)}
           fullWidth
           margin="dense"
+          required
         />
 
         <Box sx={{ display: 'flex', gap: 4 }}>
@@ -98,7 +109,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
                 <InputLabel>{role}</InputLabel>
                 <Select
                   multiple
-                  value={assignedCollaborators[role] || [] }
+                  value={assignedCollaborators[role] || []}
                   onChange={(e) => handleCollaboratorChange(role, e.target.value)}
                   renderValue={(selected) => (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -112,7 +123,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
                     </Box>
                   )}
                 >
-                  {collaborators.map((colaborador) => (
+                  {collaborators.filter(isCollaboratorAvailable).map((colaborador) => (
                     <MenuItem key={colaborador.id} value={colaborador}>
                       {`${colaborador.nombre} ${colaborador.apellido}`}
                     </MenuItem>
@@ -129,7 +140,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
                 <InputLabel>{tarea.nombre}</InputLabel>
                 <Select
                   multiple
-                  value={assignedCollaborators[tarea.id] || [] }
+                  value={assignedCollaborators[tarea.id] || []}
                   onChange={(e) => handleCollaboratorChange(tarea.id, e.target.value)}
                   renderValue={(selected) => (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
