@@ -42,7 +42,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
           margin="dense"
         />
 
-        {/* Asignacion de tareas mecanicas */}
+     {/* Asignacion de tareas mecanicas */}
         <DialogTitle>Tareas Mecanicas</DialogTitle>
         {Object.entries(colaboradoresByRol).map(([role, collaborators]) => (
           <FormControl key={role} fullWidth margin="dense">
@@ -72,7 +72,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
           </FormControl>
         ))}
 
-        {/* */}
+        {/* Solo los colaboradores que tengan esa tarea asociada son opcion */}
         <DialogTitle>Tareas Especiales</DialogTitle>
         {tareasNoMecanicas.map((tarea) => (
           <FormControl key={tarea.id} fullWidth margin="dense">

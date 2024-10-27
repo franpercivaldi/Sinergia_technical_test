@@ -12,9 +12,6 @@ import {getColaboradores} from '../api/services/colaboradoresService';
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState([
-    { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
-  ]);
 
   // Todos los colaboradores
   const [colaboradores, setColaboradores] = useState([]);
@@ -31,7 +28,9 @@ export default function CalendarPage() {
   // Tareas no mecanicas
   const [tareasNoMecanicas, setTareasNoMecanicas] = useState([]);
 
-
+  const [events, setEvents] = useState([
+    { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
