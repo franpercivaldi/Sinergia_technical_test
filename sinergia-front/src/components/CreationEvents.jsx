@@ -41,6 +41,13 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
         return false;
       }
     }
+
+    // Si no tiene titulo no se puede guardar
+    if (!eventTitle) {
+      setErrorMessage('El evento debe tener un título.');
+      return false;
+    }
+
     setErrorMessage('');
     return true;
   };
