@@ -79,9 +79,9 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg">
+    <Dialog open={open} onClose={onClose} maxWidth="lg" >
       <DialogTitle>Crear Evento</DialogTitle>
-      <DialogContent>
+      <DialogContent >
         <TextField
           label="Título del Evento"
           value={eventTitle}

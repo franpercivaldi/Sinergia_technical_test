@@ -33,19 +33,15 @@ const Sidebar = () =>  {
         width: 250,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', // Centrar horizontalmente
-        padding: 2, // Agregar un poco de padding
+        alignItems: 'center',
+        padding: 2,
       }}
       role="presentation"
       onClick={toggleDrawer(false)}
     >
       {/* Boton Home */}
       <Button sx={buttonStyles}>
-        <HomeOutlinedIcon fontSize="large" />
-      </Button>
-      {/* Boton de personal */}
-      <Button sx={buttonStyles}>
-        <GroupsOutlinedIcon fontSize="large" />
+        <HomeOutlinedIcon fontSize="large" onClick={() => navigate('/')}/>
       </Button>
       {/* Boton de calendario */}
       <Button sx={buttonStyles}>
@@ -62,7 +58,7 @@ const Sidebar = () =>  {
         onClose={toggleDrawer(false)}
         sx={{
           '& .MuiDrawer-paper': {
-            backgroundColor: 'rgba(255, 255, 255, .9)', // Fondo blanco con opacidad
+            backgroundColor: 'rgba(255, 255, 255, .9)',
           },
         }}>
         {DrawerList}
