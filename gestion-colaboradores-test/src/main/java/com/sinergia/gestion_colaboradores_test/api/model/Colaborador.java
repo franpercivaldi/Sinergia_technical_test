@@ -1,6 +1,7 @@
 package com.sinergia.gestion_colaboradores_test.api.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "colaboradores")
@@ -32,6 +33,10 @@ public class Colaborador {
 
   @Column(name = "fecha_fin_ausencia")
   private String fechaFinAusencia;
+
+  @ManyToMany
+  @JoinTable(name = "colaborador_tarea", joinColumns = @JoinColumn(name = "colaborador_id"), inverseJoinColumns = @JoinColumn(name = "tarea_id"))
+  private List<Tarea> tareas;
 
   // Getters y Setters
 
@@ -107,6 +112,13 @@ public class Colaborador {
     this.fechaFinAusencia = fechaFinAusencia;
   }
 
+  public List<Tarea> getTareas() {
+    return tareas;
+  }
+
+  public void setTareas(List<Tarea> tareas) {
+    this.tareas = tareas;
+  }
 }
 
 enum Genero {

@@ -1,5 +1,18 @@
-import React, { useState, useEffect} from 'react';
-import { Paper, TextField, Box, FormControlLabel, Checkbox, RadioGroup, Radio, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  Paper,
+  TextField,
+  Box,
+  FormControlLabel,
+  Checkbox,
+  RadioGroup,
+  Radio,
+  Button,
+  Typography,
+  createTheme,
+  ThemeProvider,
+} from '@mui/material';
+
 import SelectDates from './SelectDates';
 
 const darkTheme = createTheme({
@@ -59,6 +72,14 @@ const styles = {
   },
 };
 
+const tareasDisponibles = [
+  { id: 1, nombre: 'Acomodador' },
+  { id: 2, nombre: 'Tecnico de sonido' },
+  { id: 3, nombre: 'Audio' },
+  { id: 4, nombre: 'Video' },
+  { id: 5, nombre: 'Plataforma' },
+];
+
 const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
   const [datos, setDatos] = useState({
     nombre: '',
@@ -69,14 +90,18 @@ const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
     inactivo: false,
     fechaInicioAusencia: null,
     fechaFinAusencia: null,
+    tareas: [],
   });
 
   useEffect(() => {
     if (colaboradorEnEdicion) {
-      console.log('colab en edicion =>', colaboradorEnEdicion);
-      setDatos(colaboradorEnEdicion); // Rellena el formulario con los datos del colaborador en edición
+      console.log('Colaborador en edición:', colaboradorEnEdicion);
+      setDatos({
+        ...colaboradorEnEdicion,
+        tareas: colaboradorEnEdicion.tareas.map(tarea => tarea.id) // Extraer solo los IDs
+      });
     } else {
-      resetDatos(); // Si no hay colaborador en edición, resetea el formulario
+      resetDatos();
     }
   }, [colaboradorEnEdicion]);
 
@@ -95,6 +120,15 @@ const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
     });
   };
 
+  const handleTareaChange = (tareaId) => {
+    setDatos((prevDatos) => {
+      const nuevasTareas = prevDatos.tareas.includes(tareaId)
+        ? prevDatos.tareas.filter(id => id !== tareaId)
+        : [...prevDatos.tareas, tareaId];
+      return { ...prevDatos, tareas: nuevasTareas };
+    });
+  };
+
   const resetDatos = () => {
     setDatos({
       nombre: '',
@@ -102,17 +136,23 @@ const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
       celular: '',
       email: '',
       genero: '',
-      inactivo: false ?? false,
+      inactivo: false,
       fechaInicioAusencia: null,
       fechaFinAusencia: null,
+      tareas: [],
     });
-  }
+  };
 
   const handleSubmit = () => {
+    const datosEnvio = {
+      ...datos,
+      tareas: datos.tareas.map(id => ({ id })), // Convertir IDs a formato requerido
+    };
+
     if (colaboradorEnEdicion) {
-      onEdit(colaboradorEnEdicion.id, datos); // Llama a la función de edición
+      onEdit(colaboradorEnEdicion.id, datosEnvio);
     } else {
-      onAdd(datos); // Llama a la función de creación
+      onAdd(datosEnvio);
     }
     resetDatos();
   };
@@ -131,6 +171,21 @@ const DatosPersonales = ({ onAdd, onEdit, onCancel, colaboradorEnEdicion }) => {
             <FormControlLabel value="MASCULINO" control={<Radio />} label="Masculino" />
             <FormControlLabel value="FEMENINO" control={<Radio />} label="Femenino" />
           </RadioGroup>
+        </Box>
+
+        <Box sx={styles.checkboxGroup}>
+          {tareasDisponibles.map((tarea) => (
+            <FormControlLabel
+              key={tarea.id}
+              control={
+                <Checkbox
+                  checked={datos.tareas.includes(tarea.id)}
+                  onChange={() => handleTareaChange(tarea.id)}
+                />
+              }
+              label={tarea.nombre}
+            />
+          ))}
         </Box>
 
         <FormControlLabel
