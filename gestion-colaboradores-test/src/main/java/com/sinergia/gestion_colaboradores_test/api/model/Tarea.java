@@ -1,9 +1,7 @@
 package com.sinergia.gestion_colaboradores_test.api.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -16,6 +14,10 @@ public class Tarea {
 
   @Column(nullable = false)
   private String nombre;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private TipoTarea tipo; // Asegúrate de que sea TipoTarea y que esté correctamente importado
 
   @ManyToMany(mappedBy = "tareas")
   @JsonIgnore
@@ -37,6 +39,14 @@ public class Tarea {
 
   public void setNombre(String nombre) {
     this.nombre = nombre;
+  }
+
+  public TipoTarea getTipo() {
+    return tipo;
+  }
+
+  public void setTipo(TipoTarea tipo) {
+    this.tipo = tipo;
   }
 
   public List<Colaborador> getColaboradores() {

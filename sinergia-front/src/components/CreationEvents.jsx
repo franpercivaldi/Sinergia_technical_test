@@ -73,6 +73,7 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
         ))}
 
         {/* Asignacion de Otro tipo de tareas */}
+        <DialogTitle>Tareas Especiales</DialogTitle>
 
       </DialogContent>
       <DialogActions>
