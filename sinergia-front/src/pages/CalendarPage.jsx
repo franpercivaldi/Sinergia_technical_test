@@ -8,11 +8,14 @@ import CreationEvents from '../components/CreationEvents';
 import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
 import {getTareasNoMecanicas} from '../api/services/tareasService';
 import {getColaboradores} from '../api/services/colaboradoresService';
+import {saveEvento} from '../api/services/eventoService';
+
 
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-
+  const [tareasMecanicasIds, setTareasMecanicasIds] = useState({});
+  
   // Todos los colaboradores
   const [colaboradores, setColaboradores] = useState([]);
 
@@ -58,6 +61,15 @@ export default function CalendarPage() {
           video: video,
           plataforma: plataformas,
         });
+
+        setTareasMecanicasIds({
+          acomodador: 1,
+          tecnicoSonido: 2,
+          audio: 3,
+          video: 4,
+          plataforma: 5,
+        });
+
       } catch (error) {
         console.error('Error al obtener colaboradores por rol:', error);
       }
@@ -75,8 +87,17 @@ export default function CalendarPage() {
   const handleClose = () => setOpen(false);
 
   const handleSaveEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
-    setOpen(false);
+    saveEvento(newEvent)
+      .then((response) => {
+        setEvents([...events, {
+          title: response.titulo,
+          date: response.fecha,
+        }]);
+      })
+      .catch((error) => {
+        console.error('Error al guardar evento:', error);
+      }
+    );
   };
 
   return (
@@ -97,6 +118,7 @@ export default function CalendarPage() {
         colaboradoresByRol={colaboradoresByRol}
         tareasNoMecanicas={tareasNoMecanicas}
         colaboradores={colaboradores}
+        tareasMecanicasIds={tareasMecanicasIds}
       />
     </Box>
   );

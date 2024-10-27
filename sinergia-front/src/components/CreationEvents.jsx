@@ -4,7 +4,7 @@ import {
   TextField, MenuItem, Select, InputLabel, FormControl, Chip, Box
 } from '@mui/material';
 
-export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol, tareasNoMecanicas, colaboradores }) {
+export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol, tareasNoMecanicas, colaboradores, tareasMecanicasIds }) {
   const [eventTitle, setEventTitle] = useState('');
   const [assignedCollaborators, setAssignedCollaborators] = useState({});
 
@@ -23,10 +23,48 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
   };
 
   const handleSave = () => {
-    const newEvent = { title: eventTitle, date: selectedDate, collaborators: assignedCollaborators };
-    onSave(newEvent);
+  //  Ejemplo de como se guardaria el evento
+  //   {
+  //     "titulo": "Nueva conferencia",
+  //     "fecha": "2024-11-15",
+  //     "tareasMecanicas": [
+  //         {
+  //             "id": 1,
+  //             "colaboradoresIds": [16,19]  // Asignando 2 acomodadores
+  //         }
+  //     ],
+  //     "tareasNoMecanicas": [
+  //         {
+  //             "id": 10,
+  //             "colaboradoresIds": [16]      // Asignando 1 colaborador para palabras de apertura
+  //         }
+  //     ]
+  // }
+
+  const event = {
+    titulo: eventTitle,
+    fecha: selectedDate,
+    tareasMecanicas: Object.entries(assignedCollaborators)
+      .filter(([role]) => Object.keys(colaboradoresByRol).includes(role))
+      .map(([role, collaborators]) => ({
+        id: tareasMecanicasIds[role],
+        colaboradoresIds: collaborators.map((colaborador) => colaborador.id)
+      })),
+    tareasNoMecanicas: Object.entries(assignedCollaborators)
+      .filter(([role]) => tareasNoMecanicas.map((tarea) => tarea.id).includes(role))
+      .map(([tarea, collaborators]) => ({
+        id: tarea,
+        colaboradoresIds: collaborators.map((colaborador) => colaborador.id)
+      }))
+    };
+
+    onSave(event);
+
     setEventTitle('');
+
     setAssignedCollaborators({});
+
+    onClose();
   };
 
   return (
