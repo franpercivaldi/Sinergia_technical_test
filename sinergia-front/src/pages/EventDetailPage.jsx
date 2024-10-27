@@ -1,98 +1,121 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getEventoById } from '../api/services/eventoService';
-import {
-  TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, Chip
-} from '@mui/material';
+import { getColaboradores } from '../api/services/colaboradoresService';
+import { deleteEvento } from '../api/services/eventoService';
+import {TextField, Button, Box, Typography, FormControl, Chip, Paper} from '@mui/material';
+import Grid from '@mui/material/Grid2';
 
 export default function EventDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
+  const [colaboradores, setColaboradores] = useState([]);
+
+  // Diccionarios de tareas
+  const tareasMecanicas = {
+    1: 'Acomodador',
+    2: 'Técnico de Sonido',
+    3: 'Audio',
+    4: 'Video',
+    5: 'Plataforma',
+  };
+
+  const tareasNoMecanicas = {
+    10: 'Palabras de apertura',
+    11: 'Tematica',
+    12: 'Escenificacion',
+    13: 'Palabras de cierre',
+    14: 'Discurso',
+  };
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const data = await getEventoById(id);
-        setEvent(data);
-      } catch (error) {
-        console.error('Error al cargar evento:', error);
-      }
+    const fetchData = async () => {
+      const event = await getEventoById(id);
+      const colaboradores = await getColaboradores();
+      setEvent(event);
+      setColaboradores(colaboradores);
     };
-
-    fetchEvent();
+    fetchData();
   }, [id]);
 
-  const handleSave = async () => {
+  const getColaboradorNombre = (id) => {
+    const colaborador = colaboradores.find(c => c.id === id);
+    return colaborador ? colaborador.nombre : 'Desconocido';
+  };
+
+  const handleDelete = async () => {
     try {
-      // await updateEvento(event);
-      // navigate('/calendar'); // Redirigir de nuevo al calendario después de guardar
-      console.log('Evento guardado:', event);
-    } catch (error) {
-      console.error('Error al actualizar evento:', error);
+      await deleteEvento(id);
+      navigate('/calendar');
+    } catch(error) {
+      console.error('Error al borrar evento:', error);
     }
   };
 
   if (!event) return <Typography>Cargando...</Typography>;
 
-  const handleTareaChange = (type, tareaId, field, value) => {
-    setEvent((prevEvent) => ({
-      ...prevEvent,
-      [type]: prevEvent[type].map((tarea) =>
-        tarea.id === tareaId ? { ...tarea, [field]: value } : tarea
-      ),
-    }));
-  };
-
   return (
-    <Box style={{backgroundColor:'white'}}>
-      <Typography variant="h4">Editar Evento</Typography>
-
-      {/* Campo para editar el título */}
-      <TextField
-        label="Título del Evento"
-        value={event.titulo}
-        onChange={(e) => setEvent({ ...event, titulo: e.target.value })}
-        fullWidth
-        margin="dense"
-      />
+    <Box style={{ backgroundColor: 'white', padding: '16px' }}>
+      <Typography variant="h4">Evento {event.titulo}</Typography>
 
       {/* Campo para editar la fecha */}
       <TextField
         label="Fecha del Evento"
-        type="date"
         value={event.fecha}
-        onChange={(e) => setEvent({ ...event, fecha: e.target.value })}
-        fullWidth
         margin="dense"
+        readOnly="true"
       />
 
       {/* Campos para tareas mecánicas */}
-      <Typography variant="h6">Tareas Mecánicas</Typography>
+      <Typography variant="h6" style={{ marginTop: '20px' }}>Tareas Mecánicas</Typography>
       {event.tareasMecanicas.map((tarea) => (
-        <FormControl key={tarea.id} fullWidth margin="dense">
-          <TextField
-            label={`Nombre de la Tarea (${tarea.tipo})`}
-            value={tarea.nombre}
-            onChange={(e) => handleTareaChange("tareasMecanicas", tarea.id, "nombre", e.target.value)}
-          />
-        </FormControl>
+        <Paper key={tarea.id} style={{ padding: '16px', marginTop: '8px' }} elevation={2}>
+          <FormControl fullWidth margin="dense">
+            <TextField
+              label="Nombre de la Tarea"
+              value={tareasMecanicas[tarea.id] || 'Desconocido'}
+              margin="dense"
+            />
+          </FormControl>
+          <Typography variant="body1">Colaboradores:</Typography>
+          <Grid container spacing={1}>
+            {tarea.colaboradoresIds.map((colaboradorId) => (
+              <Grid item key={colaboradorId}>
+                <Chip label={getColaboradorNombre(colaboradorId)} />
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
       ))}
 
       {/* Campos para tareas no mecánicas */}
-      <Typography variant="h6">Tareas No Mecánicas</Typography>
+      <Typography variant="h6" style={{ marginTop: '20px' }}>Tareas No Mecánicas</Typography>
       {event.tareasNoMecanicas.map((tarea) => (
-        <FormControl key={tarea.id} fullWidth margin="dense">
-          <TextField
-            label={`Nombre de la Tarea (${tarea.tipo})`}
-            value={tarea.nombre}
-            onChange={(e) => handleTareaChange("tareasNoMecanicas", tarea.id, "nombre", e.target.value)}
-          />
-        </FormControl>
+        <Paper key={tarea.id} style={{ padding: '16px', marginTop: '8px' }} elevation={2}>
+          <FormControl fullWidth margin="dense">
+            <TextField
+              label="Nombre de la Tarea"
+              value={tareasNoMecanicas[tarea.id] || 'Desconocido'}
+              margin="dense"
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </FormControl>
+          <Typography variant="body1">Colaboradores:</Typography>
+          <Grid container spacing={1}>
+            {tarea.colaboradoresIds.map((colaboradorId) => (
+              <Grid item key={colaboradorId}>
+                <Chip label={getColaboradorNombre(colaboradorId)} />
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
       ))}
 
-      <Button onClick={handleSave} color="primary" variant="contained">
-        Guardar
+      <Button onClick={handleDelete} color="error" variant="contained" style={{ marginTop: '20px' }}>
+        Borrar
       </Button>
     </Box>
   );

@@ -42,3 +42,19 @@ export const saveEvento = async (evento) => {
     throw error;
   }
 }
+
+// Eliminar un evento por id
+export const deleteEvento = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:8080/api/eventos/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw error;
+  }
+}

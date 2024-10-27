@@ -108,7 +108,7 @@ export default function CalendarPage() {
         initialView="dayGridMonth"
         height={window.innerHeight}
         dateClick={handleDateClick}
-        eventClick={handleEventClick} // Agregar evento de clic
+        eventClick={handleEventClick}
       />
       <CreationEvents
         open={open}

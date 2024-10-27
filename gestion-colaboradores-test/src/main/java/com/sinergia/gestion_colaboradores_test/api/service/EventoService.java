@@ -8,6 +8,9 @@ import com.sinergia.gestion_colaboradores_test.api.model.Tarea;
 import com.sinergia.gestion_colaboradores_test.api.repository.ColaboradorRepository; // Asegúrate de tener el repositorio de Colaborador
 import com.sinergia.gestion_colaboradores_test.api.repository.EventoRepository;
 import com.sinergia.gestion_colaboradores_test.api.repository.TareaRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +37,53 @@ public class EventoService {
     return eventoRepository.findAll();
   }
 
-  // Método para obtener un evento por ID
-  public Evento findById(Long id) {
+  // Obtener un evento por id. Debe devolver tambien todos los colaboradores
+  // asociados a ese evento. Separados por tareas mecanicas y no mecanicas
+  public EventoDTO findById(Long id) {
     Optional<Evento> eventoOpt = eventoRepository.findById(id);
     if (eventoOpt.isPresent()) {
-      return eventoOpt.get();
+      Evento evento = eventoOpt.get();
+
+      // Construir DTO para el evento
+      EventoDTO eventoDTO = new EventoDTO();
+      eventoDTO.setTitulo(evento.getTitulo());
+      eventoDTO.setFecha(evento.getFecha().toString());
+
+      // Crear las listas de tareas mecánicas y no mecánicas con colaboradores
+      List<TareaConColaboradoresDTO> tareasMecanicasDTO = new ArrayList<>();
+      List<TareaConColaboradoresDTO> tareasNoMecanicasDTO = new ArrayList<>();
+
+      // Procesar tareas mecánicas
+      for (Tarea tarea : evento.getTareasMecanicas()) {
+        TareaConColaboradoresDTO tareaDTO = new TareaConColaboradoresDTO();
+        tareaDTO.setId(tarea.getId());
+        // Obtener IDs de colaboradores asociados a esta tarea
+        List<Long> colaboradoresIds = tarea.getColaboradores().stream()
+            .map(Colaborador::getId)
+            .toList();
+        tareaDTO.setColaboradoresIds(colaboradoresIds);
+
+        tareasMecanicasDTO.add(tareaDTO);
+      }
+
+      // Procesar tareas no mecánicas
+      for (Tarea tarea : evento.getTareasNoMecanicas()) {
+        TareaConColaboradoresDTO tareaDTO = new TareaConColaboradoresDTO();
+        tareaDTO.setId(tarea.getId());
+
+        // Obtener IDs de colaboradores asociados a esta tarea
+        List<Long> colaboradoresIds = tarea.getColaboradores().stream()
+            .map(Colaborador::getId)
+            .toList();
+        tareaDTO.setColaboradoresIds(colaboradoresIds);
+
+        tareasNoMecanicasDTO.add(tareaDTO);
+      }
+
+      eventoDTO.setTareasMecanicas(tareasMecanicasDTO);
+      eventoDTO.setTareasNoMecanicas(tareasNoMecanicasDTO);
+
+      return eventoDTO;
     } else {
       throw new IllegalArgumentException("Evento con ID " + id + " no encontrado.");
     }
@@ -111,4 +156,36 @@ public class EventoService {
 
     return eventoRepository.save(evento);
   }
+
+  // Método para borrar un evento
+  @Transactional
+  public void deleteById(Long id) {
+    Optional<Evento> eventoOpt = eventoRepository.findById(id);
+    if (eventoOpt.isPresent()) {
+      Evento evento = eventoOpt.get();
+
+      // Desvincular colaboradores de tareas mecánicas
+      for (Tarea tarea : evento.getTareasMecanicas()) {
+        tarea.getColaboradores().clear(); // Limpia la lista de colaboradores
+        tareaRepository.save(tarea); // Guarda los cambios en la tarea
+      }
+
+      // Desvincular colaboradores de tareas no mecánicas
+      for (Tarea tarea : evento.getTareasNoMecanicas()) {
+        tarea.getColaboradores().clear();
+        tareaRepository.save(tarea);
+      }
+
+      // Aquí puedes decidir eliminar las tareas si lo deseas
+      // O puedes simplemente dejarlas si podrían ser usadas en otro lugar
+      evento.getTareasMecanicas().forEach(tarea -> tareaRepository.delete(tarea));
+      evento.getTareasNoMecanicas().forEach(tarea -> tareaRepository.delete(tarea));
+
+      // Finalmente, eliminar el evento
+      eventoRepository.deleteById(id);
+    } else {
+      throw new IllegalArgumentException("Evento con ID " + id + " no encontrado.");
+    }
+  }
+
 }

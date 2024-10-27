@@ -26,12 +26,15 @@ public class EventoController {
     }
   }
 
-  // Obtener un metodo por id
+  // Obtener un evento por id. Debe devolver tambien todos los colaboradores
+  // asociados a ese evento. Separados por tareas mecanicas y no mecanicas
   @GetMapping("/{id}")
-  public ResponseEntity<Evento> obtenerEventoPorId(@PathVariable Long id) {
+  public ResponseEntity<EventoDTO> obtenerEventoPorId(@PathVariable Long id) {
     try {
-      Evento evento = eventoService.findById(id);
-      return new ResponseEntity<>(evento, HttpStatus.OK);
+      EventoDTO eventoDTO = eventoService.findById(id);
+      return new ResponseEntity<>(eventoDTO, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -47,6 +50,19 @@ public class EventoController {
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // Método para borrar un evento
+  @DeleteMapping("/{id}")
+  public ResponseEntity<HttpStatus> borrarEvento(@PathVariable Long id) {
+    try {
+      eventoService.deleteById(id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (IllegalArgumentException e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

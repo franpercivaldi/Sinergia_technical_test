@@ -9,8 +9,6 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
   const [assignedCollaborators, setAssignedCollaborators] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log(colaboradoresByRol);
-
   // Requisitos mínimos de colaboradores para cada rol
   const minimumCollaborators = {
     acomodador: 2,
