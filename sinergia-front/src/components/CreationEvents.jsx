@@ -84,6 +84,11 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
     const startDate = new Date(colaborador.fechaInicioAusencia);
     const endDate = new Date(colaborador.fechaFinAusencia);
     const eventDate = new Date(selectedDate);
+    // Si tiene el campo inactivo en true tampoco no se puede seleccionar
+    if (colaborador.inactivo) {
+      return false;
+    }
+
     return !(eventDate >= startDate && eventDate <= endDate);
   };
 
