@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // obtener todas las tareas no_mecanicas
-export const getTareas = async () => {
+export const getTareasNoMecanicas = async () => {
   try {
     const response = await axios.get('http://localhost:8080/api/tareas/no-mecanicas', {
       headers: {

@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Sidebar from '../components/Sidebar';
 import CreationEvents from '../components/CreationEvents';
 import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
+import {getTareasNoMecanicas} from '../api/services/tareasService';
+
 
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
@@ -14,6 +16,7 @@ export default function CalendarPage() {
     { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
   ]);
 
+  // Colaboradores por rol
   const [colaboradoresByRol, setColaboradoresByRol] = useState({
     acomodador: [],
     tecnicoSonido: [],
@@ -22,9 +25,20 @@ export default function CalendarPage() {
     plataforma: [],
   });
 
+  // Tareas no mecanicas
+  const [tareasNoMecanicas, setTareasNoMecanicas] = useState([]);
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        // Obtener tareas no mecanicas
+        const tareasNoMecanicas = await getTareasNoMecanicas();
+        setTareasNoMecanicas(tareasNoMecanicas);
+
+        // Obtener tareas no mecanicas
         const acomodadores = await getColaboradoresByTareaId(1);
         const tecnicosSonido = await getColaboradoresByTareaId(2);
         const audio = await getColaboradoresByTareaId(3);
@@ -75,6 +89,7 @@ export default function CalendarPage() {
         selectedDate={selectedDate}
         onSave={handleSaveEvent}
         colaboradoresByRol={colaboradoresByRol}
+        tareasNoMecanicas={tareasNoMecanicas}
       />
     </Box>
   );

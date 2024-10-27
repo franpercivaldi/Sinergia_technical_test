@@ -4,7 +4,7 @@ import {
   TextField, MenuItem, Select, InputLabel, FormControl, Chip, Box
 } from '@mui/material';
 
-export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol}) {
+export default function CreationEvent({ open, onClose, selectedDate, onSave, colaboradoresByRol, tareasNoMecanicas }) {
   const [eventTitle, setEventTitle] = useState('');
   const [assignedCollaborators, setAssignedCollaborators] = useState({});
 
@@ -72,8 +72,31 @@ export default function CreationEvent({ open, onClose, selectedDate, onSave, col
           </FormControl>
         ))}
 
-        {/* Asignacion de Otro tipo de tareas */}
+        {/* */}
         <DialogTitle>Tareas Especiales</DialogTitle>
+        {tareasNoMecanicas.map((tarea) => (
+          <FormControl key={tarea.id} fullWidth margin="dense">
+            <InputLabel>{tarea.nombre}</InputLabel>
+            <Select
+              multiple
+              value={assignedCollaborators[tarea.id] || [] }
+              onChange={(e) => handleCollaboratorChange(tarea.id, e.target.value)}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip
+                      key={value.id}
+                      label={`${value.nombre} ${value.apellido}`}
+                      onDelete={() => handleDeleteCollaborator(tarea.id, value)}
+                    />
+                  ))}
+                </Box>
+              )}
+            >
+              {/* Todos los colaboradores que no esten elejidos pueden estar aqui */}
+            </Select>
+          </FormControl>
+        ))}
 
       </DialogContent>
       <DialogActions>
