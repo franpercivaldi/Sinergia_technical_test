@@ -34,6 +34,16 @@ public class EventoService {
     return eventoRepository.findAll();
   }
 
+  // Método para obtener un evento por ID
+  public Evento findById(Long id) {
+    Optional<Evento> eventoOpt = eventoRepository.findById(id);
+    if (eventoOpt.isPresent()) {
+      return eventoOpt.get();
+    } else {
+      throw new IllegalArgumentException("Evento con ID " + id + " no encontrado.");
+    }
+  }
+
   public Evento crearEvento(EventoDTO eventoDTO) {
     Evento evento = new Evento();
     evento.setTitulo(eventoDTO.getTitulo());

@@ -26,6 +26,17 @@ public class EventoController {
     }
   }
 
+  // Obtener un metodo por id
+  @GetMapping("/{id}")
+  public ResponseEntity<Evento> obtenerEventoPorId(@PathVariable Long id) {
+    try {
+      Evento evento = eventoService.findById(id);
+      return new ResponseEntity<>(evento, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   // Método para crear un evento
   @PostMapping
   public ResponseEntity<Evento> crearEvento(@RequestBody EventoDTO eventoDTO) {

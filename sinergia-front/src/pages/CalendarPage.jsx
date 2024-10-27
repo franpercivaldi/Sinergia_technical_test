@@ -5,23 +5,19 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Box from '@mui/material/Box';
 import Sidebar from '../components/Sidebar';
 import CreationEvents from '../components/CreationEvents';
-import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
-import {getTareasNoMecanicas} from '../api/services/tareasService';
-import {getColaboradores} from '../api/services/colaboradoresService';
-import {saveEvento, getEventos} from '../api/services/eventoService';
-
+import { useNavigate } from 'react-router-dom';
+import { getColaboradoresByTareaId } from '../api/services/colaboradoresService';
+import { getTareasNoMecanicas } from '../api/services/tareasService';
+import { getColaboradores } from '../api/services/colaboradoresService';
+import { saveEvento, getEventos } from '../api/services/eventoService';
 
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
-
   const [tareasMecanicasIds, setTareasMecanicasIds] = useState({});
-
-  // Todos los colaboradores
   const [colaboradores, setColaboradores] = useState([]);
-
-  // Colaboradores por rol
   const [colaboradoresByRol, setColaboradoresByRol] = useState({
     acomodador: [],
     tecnicoSonido: [],
@@ -29,31 +25,25 @@ export default function CalendarPage() {
     video: [],
     plataforma: [],
   });
-
-  // Tareas no mecanicas
   const [tareasNoMecanicas, setTareasNoMecanicas] = useState([]);
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener todos los eventos
         const eventos = await getEventos();
         const events = eventos.map((evento) => ({
           title: evento.titulo,
           date: evento.fecha,
+          extendedProps: evento // Guardar información completa del evento
         }));
         setEvents(events);
 
-        // Obtener todos los colaboradores
         const colaboradores = await getColaboradores();
         setColaboradores(colaboradores);
 
-        // Obtener tareas no mecanicas
         const tareasNoMecanicas = await getTareasNoMecanicas();
         setTareasNoMecanicas(tareasNoMecanicas);
 
-        // Obtener tareas no mecanicas
         const acomodadores = await getColaboradoresByTareaId(1);
         const tecnicosSonido = await getColaboradoresByTareaId(2);
         const audio = await getColaboradoresByTareaId(3);
@@ -75,7 +65,6 @@ export default function CalendarPage() {
           video: 4,
           plataforma: 5,
         });
-
       } catch (error) {
         console.error('Error al obtener colaboradores por rol:', error);
       }
@@ -83,7 +72,6 @@ export default function CalendarPage() {
 
     fetchData();
   }, []);
-
 
   const handleDateClick = (arg) => {
     setSelectedDate(arg.dateStr);
@@ -98,12 +86,17 @@ export default function CalendarPage() {
         setEvents([...events, {
           title: response.titulo,
           date: response.fecha,
+          extendedProps: response // Guardar información completa del evento
         }]);
       })
       .catch((error) => {
         console.error('Error al guardar evento:', error);
-      }
-    );
+      });
+  };
+
+  const handleEventClick = (info) => {
+    const eventId = info.event.extendedProps.id;
+    navigate(`/event/${eventId}`);
   };
 
   return (
@@ -115,6 +108,7 @@ export default function CalendarPage() {
         initialView="dayGridMonth"
         height={window.innerHeight}
         dateClick={handleDateClick}
+        eventClick={handleEventClick} // Agregar evento de clic
       />
       <CreationEvents
         open={open}
