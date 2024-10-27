@@ -1,34 +1,80 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from "@fullcalendar/interaction";
 import Box from '@mui/material/Box';
-import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import Sidebar from '../components/Sidebar';
+import CreationEvents from '../components/CreationEvents';
+import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
 
 export default function CalendarPage() {
+  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState([
+    { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
+  ]);
+
+  const [colaboradoresByRol, setColaboradoresByRol] = useState({
+    acomodador: [],
+    tecnicoSonido: [],
+    audio: [],
+    video: [],
+    plataforma: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const acomodadores = await getColaboradoresByTareaId(1);
+        const tecnicosSonido = await getColaboradoresByTareaId(2);
+        const audio = await getColaboradoresByTareaId(3);
+        const video = await getColaboradoresByTareaId(4);
+        const plataformas = await getColaboradoresByTareaId(5);
+
+        setColaboradoresByRol({
+          acomodador: acomodadores,
+          tecnicoSonido: tecnicosSonido,
+          audio: audio,
+          video: video,
+          plataforma: plataformas,
+        });
+      } catch (error) {
+        console.error('Error al obtener colaboradores por rol:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const handleDateClick = (arg) => {
-    alert('date click! ' + arg.dateStr);
+    setSelectedDate(arg.dateStr);
+    setOpen(true);
   };
 
-  // Obtener la fecha de mañana en formato ISO
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const formattedDate = tomorrow.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  const handleClose = () => setOpen(false);
+
+  const handleSaveEvent = (newEvent) => {
+    setEvents([...events, newEvent]);
+    setOpen(false);
+  };
 
   return (
-    <Box
-      style={{
-        height: '100vh',
-        width: '100vw',
-      }}
-    >
+    <Box style={{ height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column' }}>
+      <Sidebar />
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         height={window.innerHeight}
-        events={[
-          { title: 'event 1', date: formattedDate }, // Evento para mañana
-        ]}
-        dateClick={handleDateClick} // Llamar funcion cuando se hace click en una fecha
+        events={events}
+        dateClick={handleDateClick}
+      />
+      <CreationEvents
+        open={open}
+        onClose={handleClose}
+        selectedDate={selectedDate}
+        onSave={handleSaveEvent}
+        colaboradoresByRol={colaboradoresByRol}
       />
     </Box>
   );

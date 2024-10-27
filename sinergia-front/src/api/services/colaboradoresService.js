@@ -61,3 +61,19 @@ export const updateColaborador = async (id, datos) => {
     throw error;
   }
 }
+
+// Retorna los colaboradores asociados a una tarea_id
+export const getColaboradoresByTareaId = async (tarea_id) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/colaboradores/tarea/${tarea_id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw error;
+  }
+}

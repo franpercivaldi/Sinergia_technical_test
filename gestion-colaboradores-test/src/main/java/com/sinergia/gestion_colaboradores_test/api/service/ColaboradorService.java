@@ -34,4 +34,8 @@ public class ColaboradorService {
     return colaboradorRepository.findById(id).orElse(null);
   }
 
+  public List<Colaborador> findByTarea(Long tarea_id) {
+    return colaboradorRepository.findByTareasId(tarea_id);
+  }
+
 }

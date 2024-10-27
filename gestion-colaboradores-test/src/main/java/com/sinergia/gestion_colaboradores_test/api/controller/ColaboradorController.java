@@ -51,4 +51,10 @@ public class ColaboradorController {
     return ResponseEntity.ok("Colaborador eliminado correctamente");
   }
 
+  // Retornar colaboradores asociados a una tarea, tarea_id es el id de la tarea
+  @GetMapping("/tarea/{tarea_id}")
+  public List<Colaborador> getByTarea(@PathVariable Long tarea_id) {
+    return colaboradorService.findByTarea(tarea_id);
+  }
+
 }
