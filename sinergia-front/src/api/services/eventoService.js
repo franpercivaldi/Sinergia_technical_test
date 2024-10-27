@@ -1,5 +1,17 @@
 import axios from 'axios';
 
+// obtener todos los eventos
+export const getEventos = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/eventos', {
+      withCredentials: false,
+    });
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 // guardar un evento
 export const saveEvento = async (evento) => {

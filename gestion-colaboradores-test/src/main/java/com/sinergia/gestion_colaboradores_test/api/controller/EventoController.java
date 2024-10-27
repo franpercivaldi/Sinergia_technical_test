@@ -15,6 +15,18 @@ public class EventoController {
   @Autowired
   private EventoService eventoService;
 
+  // Get para obtener todos los eventos
+  @GetMapping
+  public ResponseEntity<Iterable<Evento>> obtenerEventos() {
+    try {
+      Iterable<Evento> eventos = eventoService.findAll();
+      return new ResponseEntity<>(eventos, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // Método para crear un evento
   @PostMapping
   public ResponseEntity<Evento> crearEvento(@RequestBody EventoDTO eventoDTO) {
     try {

@@ -8,14 +8,16 @@ import CreationEvents from '../components/CreationEvents';
 import {getColaboradoresByTareaId} from '../api/services/colaboradoresService';
 import {getTareasNoMecanicas} from '../api/services/tareasService';
 import {getColaboradores} from '../api/services/colaboradoresService';
-import {saveEvento} from '../api/services/eventoService';
+import {saveEvento, getEventos} from '../api/services/eventoService';
 
 
 export default function CalendarPage() {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState([]);
+
   const [tareasMecanicasIds, setTareasMecanicasIds] = useState({});
-  
+
   // Todos los colaboradores
   const [colaboradores, setColaboradores] = useState([]);
 
@@ -31,13 +33,17 @@ export default function CalendarPage() {
   // Tareas no mecanicas
   const [tareasNoMecanicas, setTareasNoMecanicas] = useState([]);
 
-  const [events, setEvents] = useState([
-    { title: 'Evento 1', date: new Date().toISOString().split('T')[0] }
-  ]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Obtener todos los eventos
+        const eventos = await getEventos();
+        const events = eventos.map((evento) => ({
+          title: evento.titulo,
+          date: evento.fecha,
+        }));
+        setEvents(events);
 
         // Obtener todos los colaboradores
         const colaboradores = await getColaboradores();
@@ -104,10 +110,10 @@ export default function CalendarPage() {
     <Box style={{ height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column' }}>
       <Sidebar />
       <FullCalendar
+        events={events}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         height={window.innerHeight}
-        events={events}
         dateClick={handleDateClick}
       />
       <CreationEvents
